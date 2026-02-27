@@ -1,12 +1,38 @@
-
-import React from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+'use client'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card"
 import { Button } from "@/shared/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
+import { Input } from "@/shared/components/ui/input"
+import { Separator } from "@/shared/components/ui/separator"
+import { login } from "./actions"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { signInSchema } from "@/schema/signInschema"
+import z from "zod"
+import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field"
+import { toast } from "sonner"
+
 
 function LoginForm() {
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
+  async function loginSubmit(values: z.infer<typeof signInSchema>) {
+    const result = await login(values)
+
+    if (!result.success) {
+      toast.error(result.error)
+      return
+    }
+
+    toast.success("Login success!")
+  }
+
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
       <Card className="w-full max-w-md shadow-lg">
@@ -18,28 +44,41 @@ function LoginForm() {
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <form className="space-y-4">
-            {/* Email */}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
+          <form onSubmit={form.handleSubmit(loginSubmit)} className="space-y-4">
 
-            {/* Password */}
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                required
-              />
-            </div>
+            <Controller
+              name="email"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="email"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="password"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="password"
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
 
             {/* Forgot password */}
             <div className="flex items-center justify-between text-sm">
@@ -55,9 +94,15 @@ function LoginForm() {
             </div>
 
             {/* Submit */}
-            <Button type="submit" className="w-full">
-              Sign In
+
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? "Signing in..." : "Sign In"}
             </Button>
+
           </form>
 
           <Separator />
