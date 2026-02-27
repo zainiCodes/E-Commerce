@@ -10,9 +10,11 @@ import { signInSchema } from "@/schema/signInschema"
 import z from "zod"
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 
 function LoginForm() {
+  const router = useRouter()
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -27,9 +29,11 @@ function LoginForm() {
     if (!result.success) {
       toast.error(result.error)
       return
+    }else{
+      toast.success("Login success!")
+      router.push("/")
     }
 
-    toast.success("Login success!")
   }
 
 

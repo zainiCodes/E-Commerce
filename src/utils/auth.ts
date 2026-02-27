@@ -15,11 +15,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 password: {},
             },
             authorize: async (credentials) => {
+                console.log(credentials.email)
                 const parsed = signInSchema.safeParse(credentials)
                 if (!parsed.success) {
                     return null
                 }
+
                 const { email, password } = parsed.data
+                
                 const user = await prisma.user.findUnique({
                     where: { email },
                 })
