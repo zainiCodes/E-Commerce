@@ -8,6 +8,9 @@ import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
 import { Separator } from "@/shared/components/ui/separator"
 import { Field, FieldLabel, FieldError } from "@/shared/components/ui/field"
+import Link from "next/link"
+import { signup } from "./action"
+import { toast } from "sonner"
 function SignUpForm() {
     const form = useForm<z.infer<typeof signUpSchema>>({
         resolver: zodResolver(signUpSchema),
@@ -19,8 +22,19 @@ function SignUpForm() {
         }
     })
 
-    function SignUpSubmit(values: z.infer<typeof signUpSchema>){
-        console.log(values)
+    async function SignUpSubmit(values: z.infer<typeof signUpSchema>) {
+        values.ConfirmPassword
+        const formData = new FormData;
+        Object.entries(values).forEach(([key, value]) => {
+            formData.append(key, value)
+        })
+        const result = await signup(formData)
+        if(!result.success){
+            toast.error(result.message)
+        }else{
+            toast.success("Account created success!")
+            form.reset()
+        }
     }
     return (
         <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
@@ -102,10 +116,22 @@ function SignUpForm() {
                             )}
                         />
 
-                        <Button type="submit">
-                            sign-up
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={form.formState.isSubmitting}
+                        >
+                            {form.formState.isSubmitting ? "Signing up..." : "Sign Up"}
                         </Button>
+
                     </form>
+                    <Separator />
+                    <p className="text-center text-sm text-muted-foreground">
+                        Aready have an account?{" "}
+                        <Link href="/login" className="cursor-pointer font-medium text-primary hover:underline" >
+                            Login
+                        </Link>
+                    </p>
                 </CardContent>
             </Card>
         </div>

@@ -115,7 +115,7 @@ function LoginForm() {
           {/* Footer */}
           <p className="text-center text-sm text-muted-foreground">
             Don’t have an account?{" "}
-            <Link href="/signup" className="cursor-pointer font-medium text-primary hover:underline" onClick={()=>{router.push("/signup")}}>
+            <Link href="/signup" className="cursor-pointer font-medium text-primary hover:underline">
               Sign up
             </Link>
           </p>
