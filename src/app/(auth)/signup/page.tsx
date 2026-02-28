@@ -1,5 +1,6 @@
 import Image from "next/image";
 import signUpBanner from "@/public/signUp-banner.jpg"
+import { SignUpForm } from "@/features/auth";
 
 export default function SignupPage() {
     return (
@@ -15,23 +16,9 @@ export default function SignupPage() {
                 />
                 <div className="absolute inset-0 bg-black/30" />
             </div>
-            <div className="flex items-center justify-center p-8 bg-white">
-                <div className="w-full max-w-md space-y-6">
-                    <div>
-                        <h1 className="text-3xl font-semibold text-gray-900">
-                            Create Account
-                        </h1>
-                        <p className="text-gray-500 mt-2">
-                            Start your journey with us today.
-                        </p>
-                    </div>
 
-                    {/* FORM PLACEHOLDER */}
-                    <div className="h-64 rounded-2xl border border-dashed border-gray-300 flex items-center justify-center text-gray-400">
-                        Signup Form Goes Here
-                    </div>
-                </div>
-            </div>
+            <SignUpForm />
+
         </div>
     );
 }

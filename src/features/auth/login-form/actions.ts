@@ -1,6 +1,6 @@
 'use server'
 
-import { signInSchema } from "@/schema/signInschema"
+import { signInSchema } from "@/schema/signInSchema"
 import { signIn } from "@/utils/auth"
 import { redirect } from "next/dist/server/api-utils"
 import z from "zod"
