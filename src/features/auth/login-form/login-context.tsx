@@ -11,6 +11,7 @@ import z from "zod"
 import { Field, FieldError, FieldLabel } from "@/shared/components/ui/field"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 
 function LoginForm() {
@@ -114,9 +115,9 @@ function LoginForm() {
           {/* Footer */}
           <p className="text-center text-sm text-muted-foreground">
             Don’t have an account?{" "}
-            <span className="cursor-pointer font-medium text-primary hover:underline">
+            <Link href="/signup" className="cursor-pointer font-medium text-primary hover:underline" onClick={()=>{router.push("/signup")}}>
               Sign up
-            </span>
+            </Link>
           </p>
         </CardContent>
       </Card>
