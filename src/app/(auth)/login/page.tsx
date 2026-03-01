@@ -1,16 +1,16 @@
 import Image from "next/image";
 import loginBanner from "@/public/loign-banner.jpg"
 import { LoignForm } from "@/features/auth";
-export default function LoginPage() {
+import { auth } from "@/utils/auth";
+import { redirect } from "next/navigation";
+export default async function LoginPage() {
+    const session = await auth()
+    if(session){
+        redirect('/')
+    }
     return (
         <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-linear-to-br from-gray-50 to-gray-100">
-
-            <div className="flex items-center justify-center bg-white">
-                <div className=" w-full space-y-6">
-                    <LoignForm />
-                </div>
-            </div>
-
+            <LoignForm />
             <div className="relative hidden md:block">
                 <Image
                     src={loginBanner}

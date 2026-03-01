@@ -7,8 +7,7 @@ import z from "zod"
 
 export async function login(values: z.infer<typeof signInSchema>) {
     try {
-        const {id} = await signIn("credentials", {...values, redirect: false})
-        console.log(id)
+        await signIn("credentials", {...values, redirect: false})
         return { success: true }
     } catch {
         return { error: "Invalid email or password" }
