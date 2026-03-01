@@ -2,7 +2,7 @@
 
 import { signUpSchema } from "@/schema/signUpSchema"
 import { signIn } from "@/utils/auth"
-import { prisma } from "@/utils/prisma"
+import { prisma } from "@/server/prisma"
 import bcrypt from "bcryptjs"
 import z from "zod"
 

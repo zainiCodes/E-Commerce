@@ -3,6 +3,7 @@
 import React from "react"
 import { Toaster } from "@/shared/components/ui/sonner"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SessionProvider } from "next-auth/react";
 
 
 type ProvidersProps = {
@@ -12,11 +13,13 @@ export default function Providers({ children }: ProvidersProps) {
     const queryClient = new QueryClient()
     return (
         <main>
-            <QueryClientProvider client={queryClient}>
-                {children}
-                <Toaster />
+            <SessionProvider>
+                <QueryClientProvider client={queryClient}>
+                    {children}
+                    <Toaster />
 
-            </QueryClientProvider>
+                </QueryClientProvider>
+            </SessionProvider>
         </main>
 
 
