@@ -2,18 +2,22 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Menu, X, ShoppingCart } from 'lucide-react'
+import { Button } from '@/shared/components/ui/button'
+import { Skeleton } from '@/shared/components/ui/skeleton'
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
   SheetTitle,
   SheetDescription,
-} from '@/components/ui/sheet'
+} from '@/shared/components/ui/sheet'
+import { useSession } from 'next-auth/react'
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const { data: session, status } = useSession()
 
   const navLinks = [
     { href: '#home', label: 'Home' },
@@ -52,14 +56,32 @@ export default function Navbar() {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <Button
-              variant="outline"
-            >
-              Order Now
-            </Button>
-            <Button>
-              Sign Up
-            </Button>
+            {status === 'loading' ? (
+              <>
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <Skeleton className="h-10 w-24 rounded-md" />
+              </>
+            ) : status === 'authenticated' ? (
+              <>
+                <Button variant="ghost" size="icon" aria-label="Cart">
+                  <ShoppingCart className="h-5 w-5" />
+                </Button>
+                <div className="font-medium text-sm px-3 py-2 bg-secondary text-secondary-foreground rounded-md">
+                  {session?.user?.name || 'User'}
+                </div>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="icon" aria-label="Cart">
+                  <ShoppingCart className="h-5 w-5" />
+                </Button>
+                <Button>
+                  <Link href={"/login"}>
+                    Sign Up
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -95,9 +117,8 @@ export default function Navbar() {
                       <Link
                         key={link.href}
                         href={link.href}
-                        className={`px-4 py-3 rounded-lg text-foreground hover:bg-accent hover:text-accent-foreground font-medium transition-colors duration-200 ${
-                          index !== navLinks.length - 1 ? 'border-b border-border' : ''
-                        }`}
+                        className={`px-4 py-3 rounded-lg text-foreground hover:bg-accent hover:text-accent-foreground font-medium transition-colors duration-200 ${index !== navLinks.length - 1 ? 'border-b border-border' : ''
+                          }`}
                         onClick={() => setIsOpen(false)}
                       >
                         {link.label}
@@ -108,14 +129,32 @@ export default function Navbar() {
 
                 {/* Mobile CTA Buttons */}
                 <div className="border-t border-border p-4 flex flex-col gap-3">
-                  <Button
-                    variant="outline"
-                  >
-                    Order Now
-                  </Button>
-                  <Button className="w-full rounded-lg font-semibold">
-                    Sign Up
-                  </Button>
+                  {status === 'loading' ? (
+                    <>
+                      <Skeleton className="h-10 w-full rounded-md" />
+                      <Skeleton className="h-10 w-full rounded-md" />
+                    </>
+                  ) : status === 'authenticated' ? (
+                    <>
+                      <div className="flex items-center gap-3 px-3 py-2 bg-secondary text-secondary-foreground rounded-md">
+                        <span className="font-medium">{session?.user?.name || 'User'}</span>
+                      </div>
+                      <Button variant="outline" className="w-full justify-start gap-2">
+                        <ShoppingCart className="h-5 w-5" />
+                        Cart
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button variant="outline" className="w-full justify-start gap-2">
+                        <ShoppingCart className="h-5 w-5" />
+                        Cart
+                      </Button>
+                      <Button className="w-full rounded-lg font-semibold">
+                        Sign Up
+                      </Button>
+                    </>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
