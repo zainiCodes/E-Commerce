@@ -6,9 +6,9 @@ import { redirect } from "next/navigation";
 
 export default async function SignupPage() {
     const session = await auth()
-        if(session){
-            redirect("/")
-        }
+    if (session) {
+        redirect("/")
+    }
     return (
         <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-linear-to-br from-gray-50 to-gray-100">
 

@@ -1,7 +1,8 @@
-import Navbar from "@/features/home-page/header-section/navbar/navbar";
+import { HeaderSection } from "@/features/home-page";
+
 
 export default async function Home() {
   return (
-    <Navbar />
+    <HeaderSection />
   );
 }
