@@ -30,9 +30,9 @@ function LoginForm() {
     if (!result.success) {
       toast.error(result.error)
       return
-    }else{
+    } else {
       toast.success("Login success!")
-      router.push("/")
+      router.refresh()
     }
 
   }
