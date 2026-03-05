@@ -85,17 +85,15 @@ model Authenticator {
 }
 
 model Product {
-  id            Int     @id @default(autoincrement())
+  id            Int          @id @default(autoincrement())
   name          String
   description   String
-  price         Float
+  price         Int
   discountPrice Float?
-  stock         Int     @default(0)
-  isFeatured    Boolean @default(false)
-  isPublished   Boolean @default(true)
-
-  categoryId Int
-  category   Category @relation(fields: [categoryId], references: [id])
+  stock         Int          @default(0)
+  isFeatured    Boolean      @default(false)
+  isPublished   Boolean      @default(true)
+  category      CategoryType
 
   images ProductImage[]
 
@@ -113,10 +111,8 @@ model ProductImage {
   createdAt DateTime @default(now())
 }
 
-model Category {
-  id        Int       @id @default(autoincrement())
-  name      String
-  slug      String    @unique
-  products  Product[]
-  createdAt DateTime  @default(now())
+enum CategoryType {
+  male
+  female
+  kids
 }

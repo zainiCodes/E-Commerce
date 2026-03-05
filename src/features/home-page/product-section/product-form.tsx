@@ -12,8 +12,6 @@ import {
 } from "@/shared/components/ui/dialog"
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/shared/components/ui/field"
 import { Input } from "@/shared/components/ui/input"
-import { Label } from "@/shared/components/ui/label"
-import { } from "@/shared/components/ui/field"
 
 import {
     Controller,
@@ -53,10 +51,9 @@ export default function ProductForm() {
             description: "",
             price: 1,
             isFeatured: false,
-            isPublished: true,
-            Image: null,
+            isPublished: false,
+            Image: '',
         }
-
     })
     function onSubmit(values: z.infer<typeof ProductSchema>) {
         console.log(values)
@@ -139,9 +136,9 @@ export default function ProductForm() {
                                     <Field data-invalid={fieldState.invalid}>
                                         <FieldLabel htmlFor="price">Price</FieldLabel>
                                         <Input
-                                            {...field}
-                                            id="price"
-                                            type="text"
+                                            type="number"
+                                            step="0.01"
+                                            value={field.value === 0 ? "" : field.value}
                                             onChange={(e) => field.onChange(Number(e.target.value))}
                                         />
                                         <FieldDescription>Enter the price here</FieldDescription>
@@ -190,7 +187,17 @@ export default function ProductForm() {
                                         <Input
                                             id="Image"
                                             type="file"
-                                            onChange={(e) => field.onChange(e.target.files?.[0])}
+                                            accept="image/png,image/jpeg"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0]
+                                                if (!file) return
+
+                                                const reader = new FileReader()
+                                                reader.readAsDataURL(file)
+                                                reader.onload = () => {
+                                                    field.onChange(reader.result as string) // base64
+                                                }
+                                            }}
                                         />
                                         <FieldDescription>Select a file to upload.</FieldDescription>
                                         {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
