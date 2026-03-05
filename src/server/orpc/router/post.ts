@@ -7,8 +7,8 @@ const name = protectedProcedure
   .input(z.object({
     name: z.string()
   }))
-  .handler(({input})=>{
-    return {name: input.name}
+  .handler(({ input }) => {
+    return { name: input.name }
   })
 
 

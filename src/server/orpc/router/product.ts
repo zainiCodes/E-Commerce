@@ -34,3 +34,7 @@ const AddProduct = protectedProcedure
 
         return product
     })
+
+export const ProductRouter = {
+    AddProduct,
+};

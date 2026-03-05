@@ -41,6 +41,9 @@ import {
     SelectValue
 } from "@/shared/components/ui/select"
 import { ProductSchema } from "@/schema/productSchema"
+import { client } from "@/server/orpc/utils/orpc"
+import { useMutation } from "@tanstack/react-query"
+import { Spinner } from "@/shared/components/ui/spinner"
 
 export default function ProductForm() {
     const form = useForm<z.infer<typeof ProductSchema>>({
@@ -55,8 +58,17 @@ export default function ProductForm() {
             Image: '',
         }
     })
+    const addProduct = useMutation(client.product.AddProduct.mutationOptions({
+        onSuccess: () => {
+            toast.success("Product added successfully")
+            form.reset()
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        }
+    }))
     function onSubmit(values: z.infer<typeof ProductSchema>) {
-        console.log(values)
+        addProduct.mutate(values)
     }
     return (
         <Dialog>
@@ -205,16 +217,15 @@ export default function ProductForm() {
                                 )}
                             />
 
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit" disabled={addProduct.isPending}>
+                                {addProduct.isPending ?
+                                    <Button>
+                                        <Spinner /> Adding product
+                                    </Button> : "Add Product"}
+                            </Button>
                         </form>
                     </FieldGroup>
                 </div>
-                <DialogFooter>
-                    <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button type="submit">Add Product</Button>
-                </DialogFooter>
             </DialogContent>
 
         </Dialog>
