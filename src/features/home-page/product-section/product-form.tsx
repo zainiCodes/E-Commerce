@@ -42,7 +42,7 @@ import {
 } from "@/shared/components/ui/select"
 import { ProductSchema } from "@/schema/productSchema"
 import { client } from "@/server/orpc/utils/orpc"
-import { useMutation } from "@tanstack/react-query"
+import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { Spinner } from "@/shared/components/ui/spinner"
 
 export default function ProductForm() {
@@ -58,9 +58,13 @@ export default function ProductForm() {
             Image: '',
         }
     })
+    const qc = useQueryClient()
     const addProduct = useMutation(client.product.AddProduct.mutationOptions({
         onSuccess: () => {
             toast.success("Product added successfully")
+            qc.invalidateQueries({
+                queryKey: client.product.getAllProducts.key()
+            })
             form.reset()
         },
         onError: (error) => {
