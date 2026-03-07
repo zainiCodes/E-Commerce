@@ -34,7 +34,18 @@ const AddProduct = protectedProcedure
 
         return product
     })
+const getAllProducts = protectedProcedure.handler(async ({ context }) => {
+
+    const Products = await context.prisma.productImage.findMany({
+        include: {
+            product: true,
+        },
+    });
+
+    return Products;
+});
 
 export const ProductRouter = {
     AddProduct,
+    getAllProducts,
 };

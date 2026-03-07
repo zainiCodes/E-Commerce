@@ -1,6 +1,8 @@
 import ProductForm from "./product-form";
+import ProductList from "./Product-list";
+import { Suspense } from "react";
 
-export default function ProductList() {
+export default async function ProductSection() {
     return (
         <div className="w-full min-h-screen p-6">
             <div className="flex items-center justify-between border-b pb-4 mb-6">
@@ -15,7 +17,10 @@ export default function ProductList() {
                 <div>
                     <ProductForm />
                 </div>
+            </div>
+            <div>
 
+                <ProductList />
             </div>
 
         </div>
