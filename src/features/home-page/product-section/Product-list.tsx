@@ -8,11 +8,13 @@ import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import { ShoppingBag, Eye } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 
 export default function ProductList() {
     const allProducts = useQuery(client.product.getAllProducts.queryOptions())
     const [isImageLoading, setIsImageLoading] = useState(true);
+    const router = useRouter()
 
     if (allProducts.isPending || allProducts.isLoading) {
         return (
@@ -62,7 +64,7 @@ export default function ProductList() {
         <div className="w-full mx-auto py-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {productsData.map((item) => (
-                    <Card className="group overflow-hidden flex flex-col hover:shadow-xl transition-all duration-300 border-border/50 bg-card">
+                    <Card key={item.id} className="group overflow-hidden flex flex-col hover:shadow-xl transition-all duration-300 border-border/50 bg-card">
                         <div className="relative h-[280px] w-full overflow-hidden bg-muted">
                             {isImageLoading && <Skeleton className="absolute inset-0 z-10 h-full w-full rounded-none" />}
                             <Image
@@ -110,7 +112,9 @@ export default function ProductList() {
                         </CardHeader>
 
                         <CardFooter className="pt-0 mt-auto">
-                            <Button className="w-full font-medium shadow-sm hover:shadow-md transition-all gap-2 cursor-pointer" size="lg">
+                            <Button className="w-full font-medium shadow-sm hover:shadow-md transition-all gap-2 cursor-pointer" size="lg"
+                                onClick={() => router.push(`/product/${item.product.id}`)}
+                            >
                                 <Eye className="h-4 w-4" />
                                 View Product
                             </Button>
@@ -118,6 +122,6 @@ export default function ProductList() {
                     </Card>
                 ))}
             </div>
-        </div>
+        </div >
     )
 }

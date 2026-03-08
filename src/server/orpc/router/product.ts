@@ -45,7 +45,25 @@ const getAllProducts = protectedProcedure.handler(async ({ context }) => {
     return Products;
 });
 
+const getProductById = protectedProcedure
+    .input(z.object({
+        id: z.string(),
+    }))
+    .handler(async ({ input, context }) => {
+        const { id } = input
+        const product = await context.prisma.product.findUnique({
+            where: {
+                id: Number(id),
+            },
+            include: {
+                images: true,
+            },
+        });
+        return product;
+    });
+
 export const ProductRouter = {
     AddProduct,
     getAllProducts,
+    getProductById,
 };
