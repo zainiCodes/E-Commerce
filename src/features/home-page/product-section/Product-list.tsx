@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query';
 import { client } from '@/server/orpc/utils/orpc';
 import { Badge } from '@/shared/components/ui/badge';
@@ -76,7 +76,7 @@ export default function ProductList() {
                                     }`}
                                 onLoad={() => setIsImageLoading(false)}
                             />
-                            <div className="absolute top-3 left-3 flex flex-wrap gap-2 z-20">
+                            <div className="absolute top-3 left-3 flex flex-wrap gap-2 z-10">
                                 <Badge className="capitalize px-3 py-1 font-semibold backdrop-blur-md bg-background/80 text-foreground border-none" variant="secondary">
                                     {item.product.category}
                                 </Badge>

@@ -1,5 +1,5 @@
 import * as z from 'zod'
-import { protectedProcedure } from '../utils/procedures';
+import { protectedProcedure, publicProcedure } from '../utils/procedures';
 import { ProductSchema } from '@/schema/productSchema';
 import cloudinary from '@/lib/cloudinary'; // 👈 Import cloudinary
 
@@ -34,7 +34,7 @@ const AddProduct = protectedProcedure
 
         return product
     })
-const getAllProducts = protectedProcedure.handler(async ({ context }) => {
+const getAllProducts = publicProcedure.handler(async ({ context }) => {
 
     const Products = await context.prisma.productImage.findMany({
         include: {
